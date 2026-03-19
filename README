@@ -1,0 +1,158 @@
+### SpamFilter (Go)
+
+Simple **Go-based spam filter** using a **bag-of-words model** and an **Enron-style email spam dataset**.  
+This is a **personal hobby / learning project**, **not intended for real-world or production use**.
+
+---
+
+### Status / Disclaimer
+
+- **Hobby project only**: for learning Go and basic text classification.
+- **Not production-ready**: no security review, no guarantees about accuracy, robustness, or performance.
+- **Do not use** as a real email filter in any critical or production environment.
+
+---
+
+### Project overview
+
+This project reads email text data, tokenizes it, builds a simple **bag-of-words** representation, and applies a basic model to classify messages as spam or ham.
+
+Main pieces of code live in:
+
+- `main.go`: entry point / wiring.
+- `bagofwords/`: bag-of-words feature logic.
+- `tokenizer/` and `tokenizer/parser/`: simple text tokenization/parsing.
+- `model/`: prediction logic.
+
+---
+
+### Dataset setup
+
+The project uses the **Email Spam Classification dataset** from Kaggle:  
+`purusinghvi/email-spam-classification-dataset`
+
+It expects:
+
+- A ZIP file named **`enron-spam.zip`** in the **project root**.
+- An extracted directory named **`enron-spam/`** in the **project root**.
+
+Expected layout (simplified):
+
+```text
+spamfilter/
+  main.go
+  bagofwords/
+  tokenizer/
+  model/
+  enron-spam.zip
+  enron-spam/
+    Enron_Txt_fn.csv
+    ...other dataset files...
+```
+
+#### Requirements (Kaggle API)
+
+To use the Kaggle download URL, you need:
+
+- A **Kaggle account**
+- A **Kaggle API token** configured for the Kaggle CLI
+
+See Kaggle’s API docs:  
+[Kaggle API documentation](https://www.kaggle.com/docs/api)
+
+In short:
+
+1. On Kaggle, go to **Account** → **Create New API Token** to download `kaggle.json`.
+2. Place `kaggle.json` in:
+   - Linux / macOS: `~/.kaggle/kaggle.json`
+   - Windows: `C:\Users\<YourUser>\.kaggle\kaggle.json`
+
+---
+
+### Download dataset as `enron-spam.zip` (project root)
+
+All commands below assume your current working directory is the **project root** (`spamfilter/`).
+
+#### Bash / Unix-like shell
+
+From the project root:
+
+```bash
+curl -L -o enron-spam.zip \
+  https://www.kaggle.com/api/v1/datasets/download/purusinghvi/email-spam-classification-dataset
+```
+
+#### From anywhere (absolute path)
+
+Replace `<PROJECT_ROOT>` with the absolute path to your `spamfilter` folder:
+
+```bash
+curl -L -o "<PROJECT_ROOT>/enron-spam.zip" \
+  https://www.kaggle.com/api/v1/datasets/download/purusinghvi/email-spam-classification-dataset
+```
+
+Example matching this project on Windows (Git Bash / WSL):
+
+```bash
+curl -L -o "/c/Users/DELL/Documents/Isymply/go/spamfilter/enron-spam.zip" \
+  https://www.kaggle.com/api/v1/datasets/download/purusinghvi/email-spam-classification-dataset
+```
+
+---
+
+### Unzip to `enron-spam/` in project root
+
+After you have `enron-spam.zip` in the project root, extract it into a folder named `enron-spam/` in the same directory.
+
+#### Linux / macOS (bash)
+
+From the project root:
+
+```bash
+unzip enron-spam.zip -d enron-spam
+```
+
+#### Windows PowerShell
+
+From the project root:
+
+```powershell
+Expand-Archive -Path .\enron-spam.zip -DestinationPath .\enron-spam -Force
+```
+
+After extraction, you should see something like:
+
+```text
+spamfilter/
+  enron-spam.zip
+  enron-spam/
+    Enron_Txt_fn.csv
+    ...
+```
+
+---
+
+### Running the project
+
+Assuming you have Go installed, from the project root you can run:
+
+```bash
+go run ./...
+```
+
+or:
+
+```bash
+go run main.go
+```
+
+For details on behavior, flags, or modes, check `main.go`.
+
+---
+
+### Notes / limitations
+
+- **Very simple model**: basic bag-of-words, not tuned for accuracy.
+- **No security guarantees**: do not expose this to untrusted input in production.
+- **Not optimized**: may be slow or memory-heavy on large datasets.
+- **Learning only**: intended for experimentation with Go and simple spam filtering ideas.
